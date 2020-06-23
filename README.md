@@ -26,6 +26,7 @@ You do not need to install these, pip does that by itself. But heres a list of w
 * pandas
 * pyyaml
 * configurator
+* xlrd
 
 ## Basic Usage:
 This needs python3.6+, nothing below is supported. After the pip installation, you can easily call this from anywhere using the terminal/powershell. Just go to the directory where you have the markdown files/source csv files and the images and:
@@ -80,6 +81,7 @@ All the csv files placed in the source folder will be converted to tables. For g
 ### Graphs:
 These are triggered by a graph statement at the end of the csvfile (Look at the example in example). So if the line contains `graph(x,y)`, then a graph will be plotted. Writing `fit(lin)` next will fit the graph in the said format. Look at the example.
 You can fit polynomial functions till 4 order. To refer to a graph, you need to do `@g:graphname`. The graph name is y column name without \ and $ and the order number. So, it might be `Potential1`.
+Of course, this supports excel files. Just keep your data as sheets inside a excel file named `data.xlsx`. Just keep this inside your project directory.
 
 ### Referencing:
 You can add references by just adding a dois.txt file, containing the list of dois in your source directory. You might need to manually compile it to actually get the references printed. Please note that you can just not use the referencing schemes explained above with the `@` and just type `\ref{something}` to use the default syntax.

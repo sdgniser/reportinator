@@ -42,10 +42,10 @@ def main(*args, **kwargs):
     for dirs in configlist:
         dirs = os.path.expanduser(dirs)
         if os.path.isdir(dirs):
-            configpath = dirs+'/reportinator/config.yaml'
+            configpath = dirs + '/reportinator/config.yaml'
             try:
-                os.makedirs(dirs+'/reportinator/layouts')
-                os.makedirs(dirs+'/reportinator/scripts')
+                os.makedirs(dirs + '/reportinator/layouts')
+                os.makedirs(dirs + '/reportinator/scripts')
             except FileExistsError:
                 pass
 
@@ -54,7 +54,7 @@ def main(*args, **kwargs):
         with open(configpath, 'w') as f:
             f.write(default_config)
 
-    print("Find your configuration file at: "+configpath)
+    print("Find your configuration file at: " + configpath)
 
     with open(configpath) as f:
         config = yaml.load(f)
@@ -65,29 +65,31 @@ def main(*args, **kwargs):
     style = input("Enter name of the custom class file (Leave blank for default): ")
 
     if name:
-        config["user"]["name"]=name
+        config["user"]["name"] = name
     if affiliation:
-        config["user"]["affiliation"]=affiliation
+        config["user"]["affiliation"] = affiliation
     if style:
-        config["user"]["style"]=style
+        config["user"]["style"] = style
     else:
-        config["user"]["style"]='double'
+        config["user"]["style"] = 'double'
 
-    if shutil.which("pydflatex"):
-        config["compiler"]="pydflatex -t -k -o"
+    if shutil.which("latexmk"):
+        config["compiler"] = "latexmk -pdf -bibtex -f -silent"
+    elif shutil.which("pydflatex"):
+        config["compiler"] = "pydflatex -t -k -o"
     elif shutil.which("pdflatex"):
-        config["compiler"]="pdflatex -interaction nonstopmode -halt-on-error -file-line-error"
+        config["compiler"] = "pdflatex -interaction nonstopmode -halt-on-error -file-line-error"
     elif shutil.which("xelatex"):
-        config["compiler"]="xelatex"
+        config["compiler"] = "xelatex"
     elif shutil.which("lualatex"):
-        config["compiler"]="lualatex"
+        config["compiler"] = "lualatex"
     else:
-        config["compiler"]="none"
+        config["compiler"] = "none"
 
-    config["reconfig"]=False
+    config["reconfig"] = False
 
     with open(configpath, "w") as f:
         yaml.dump(config, f)
 
-if __name__== "__main__":
+if __name__ == "__main__":
     main()

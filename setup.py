@@ -40,6 +40,7 @@ setup(name='reportinator',
           'pandas',
           'pyyaml',
           'configurator',
+          'xlrd',
           ],
       include_package_data=True,
       zip_safe=False)

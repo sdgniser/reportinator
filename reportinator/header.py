@@ -4,12 +4,12 @@ import reportinator.config
 import reportinator
 
 def main(section):
-    title="title"
+    title = "title"
 
     for file in os.listdir(reportinator.cache):
-        ext=os.path.splitext(file)[1]
+        ext = os.path.splitext(file)[1]
         if ext == '.md':
-            title=os.path.splitext(file)[0]
+            title = os.path.splitext(file)[0]
 
     header = """
 \\documentclass{%s}
@@ -21,6 +21,6 @@ def main(section):
     """ % (reportinator.config.user.style, title, reportinator.config.user.name, reportinator.config.user.affiliation)
     return header
 
-if __name__== "__main__":
-    section=sys.argv[1]
+if __name__ == "__main__":
+    section = sys.argv[1]
     print(main(section))

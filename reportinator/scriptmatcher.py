@@ -10,6 +10,6 @@ def main(module, section):
         return importlib.import_module(module).main(section)
     except:
         try:
-            return importlib.import_module("reportinator."+module).main(section)
+            return importlib.import_module("reportinator." + module).main(section)
         except:
             return importlib.import_module("reportinator.default").main(section)

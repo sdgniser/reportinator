@@ -4,7 +4,7 @@ import os
 
 
 def convert(string):
-    string='\n'+string
+    string = '\n' + string
 
     # Images
     newstring=""
@@ -17,11 +17,11 @@ def convert(string):
     \\caption{%s}
     \\label{%s}
 \\end{figure}
-            """ % (re.findall('!\\[.*\\]\\((.*)\\)', line)[0], re.findall('!\\[(.*)\\]', line)[0], 'f:'+re.findall('!\\[.*\\]\\((.*)\\)', line)[0].split('.')[0])
-            newstring=newstring+image_text
-            line=""
-        newstring=newstring+line+'\n'
-    string=newstring
+            """ % (re.findall('!\\[.*\\]\\((.*)\\)', line)[0], re.findall('!\\[(.*)\\]', line)[0], 'f:' + re.findall('!\\[.*\\]\\((.*)\\)', line)[0].split('.')[0])
+            newstring = newstring + image_text
+            line = ""
+        newstring = newstring + line + '\n'
+    string = newstring
 
 
     # Section Headers
@@ -65,6 +65,6 @@ def convert(string):
     return string
 
 
-if __name__== "__main__":
-    section=sys.argv[1]
+if __name__ == "__main__":
+    section = sys.argv[1]
     print(convert(section))
