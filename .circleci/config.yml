@@ -1,0 +1,45 @@
+version: 2.1
+
+orbs:
+  win: circleci/windows@2.2.0
+  
+jobs:
+  build-test-linux:
+    docker:
+      - image: circleci/python:latest
+    steps:
+      - checkout
+      - run:
+          command: python3 -m pip install -e .; sudo apt-get install texlive-latex-extra texlive-bibtex-extra
+          name: Linux installation
+      - run:
+          command: reportinator --source example
+          name: Testing
+      - run:
+          command: ls ./example/output.tex; ls ./example/output.pdf
+          name: Output generation
+      - run:
+          command: cat ./example/output.tex
+          name: TeX generation
+  build-test-windows:
+    executor: win/default
+    steps:
+      - checkout
+      - run:
+          command: py -m pip install -e .
+          name: Windows installation
+      - run:
+          command: reportinator --source example
+          name: Testing
+      - run:
+          command: ls ~/Desktop/make-my-report.py; ls ./example/output.tex
+          name: Output generation
+      - run:
+          command: cat ./example/output.tex
+          name: TeX generation
+
+workflows:
+  build-and-test:
+    jobs:
+      - build-test-linux
+      - build-test-windows
