@@ -43,6 +43,7 @@ def modify():
         winreg.SetValueEx(key, PATH, 0, winreg.REG_EXPAND_SZ, envpath)
         return paths, envpath
 
+
 def main():
     paths, envpath = modify()
     if len(paths) > 1:
@@ -53,6 +54,7 @@ def main():
     print("\nPATH is now:\n%s\n" % envpath)
     print("Expanded:")
     print(winreg.ExpandEnvironmentStrings(envpath))
+
 
 if __name__ == '__main__':
     main()

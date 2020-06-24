@@ -13,6 +13,7 @@ config = Config({
     'reconfig': True,
     'compiler': 'none',
     'script': {
+        'location': cdir,
         'locations': {
             '~/.reportinator/scripts',
             '~/.config/reportinator/scripts',
@@ -20,6 +21,7 @@ config = Config({
             },
         },
     'layout': {
+        'location': cdir,
         'locations': {
             '~/.reportinator/layouts',
             '~/.config/reportinator/layouts',
@@ -32,11 +34,8 @@ config = Config({
         '~/.config/reportinator/config.yaml',
         '~/AppData/Local/Programs/reportinator/config.yaml',
         },
+    'location': '',
     })
-
-config.location = ""
-config.script.location = cdir
-config.layout.location = cdir
 
 for dirs in config.locations:
     config = config + Config.from_path(dirs, optional=True)

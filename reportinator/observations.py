@@ -6,13 +6,14 @@ import reportinator
 
 def main(section):
     output = ""
-    cache_dir=reportinator.cache
+    output += "\n\\section{Observations}\n"
+    cache_dir = reportinator.cache
 
     def convertToLaTeX(names, df, alignment="c"):
         numColumns = df.shape[1]
         numRows = df.shape[0]
         output = io.StringIO()
-        colFormat = ("%s|" % (("|"+ alignment) * numColumns))
+        colFormat = ("%s|" % (("|" + alignment) * numColumns))
         # Write header
         output.write("\\begin{table}[H]\n")
         output.write("\\centering")
@@ -26,45 +27,39 @@ def main(section):
                          % (" & ".join([str(val) for val in df.iloc[i]])))
         # Write footer
         output.write("\\end{tabular}}\n")
-        output.write("\\caption{"+names+"}\n")
-        output.write("\\label{t:"+names+"}")
+        output.write("\\caption{" + names + "}\n")
+        output.write("\\label{t:" + names + "}")
         output.write("\\end{table}")
         return output.getvalue()
 
+    # EXCEL
+    if os.path.exists(cache_dir + "/data.xlsx"):
+        path = cache_dir + "/data.xlsx"
+        xls = pandas.ExcelFile(path)
+        sheets = xls.sheet_names
+        for sheet in sheets:
+            names = str(sheet)
+            df = pandas.read_excel(xls, sheet_name=sheet, index_col=None)
+            with open(cache_dir + "/csvs/" + sheet + ".csv", 'w+') as csvfile:
+                df.to_csv(csvfile, encoding='utf8', index=False, line_terminator='\n')
+
     # CSV FILES
-    if not os.listdir(cache_dir+"/csvs/"):
+    if not os.listdir(cache_dir + "/csvs/"):
         pass
     else:
-        for item in os.listdir(cache_dir+"/csvs/"):
+        for item in os.listdir(cache_dir + "/csvs/"):
             path = cache_dir+"/csvs/" + item
             df = pandas.read_csv(path)
             df = df.round(decimals=2)
             df.fillna('', inplace=True)
             checkstr = str(df.iloc[-1:])
             if "graph" in checkstr:
-                df.drop(df.tail(1).index,inplace=True)
+                df.drop(df.tail(1).index, inplace=True)
             names = str(item[:-4])
-            output += convertToLaTeX(names,df,alignment='c')
-
-    # EXCEL
-    if os.path.exists(cache_dir+"/data.xlsx"):
-        path = cache_dir+"/data.xlsx"
-        xls = pandas.ExcelFile(path)
-        sheets = xls.sheet_names
-
-        for sheet in sheets:
-            names = str(sheet)
-            df = pandas.read_excel(xls, sheet_name=sheet, index_col=None)
-            with open(cache_dir+"/csvs/"+sheet+".csv", 'w+') as csvfile:
-                df.to_csv(csvfile, encoding='utf8', index=False)
-            df = df.round(decimals=2)
-            df.fillna('', inplace=True)
-            checkstr = str(df.iloc[-1:])
-            if "graph" in checkstr:
-                df.drop(df.tail(1).index,inplace=True)
-            output += convertToLaTeX(names,df,alignment='c')
+            output += convertToLaTeX(names, df, alignment='c')
     return output
 
-if __name__== "__main__":
-    section=sys.argv[1]
+
+if __name__ == "__main__":
+    section = sys.argv[1]
     print(main(section))
