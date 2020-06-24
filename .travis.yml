@@ -1,0 +1,26 @@
+language: python
+os: linux
+dist: xenial
+python:
+  - "3.6"
+  - "3.7"
+  - "3.8"
+
+branches:
+  only:
+    - master
+
+
+before_install:
+  - sudo apt-get install texlive-latex-extra texlive-bibtex-extra
+
+install:
+  - python3 -m pip install -e .
+
+script:
+  - reportinator --source example
+  - ls ./example/output.tex; ls ./example
+  - cat ./example/output.tex
+  - which pdflatex; which latexmk
+
+root: true
