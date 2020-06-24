@@ -27,7 +27,7 @@ def main(file, lister, index, *args, **kwargs):
     y_list = [int(x) - 1 for x in y_list]
     x_index = y_list.pop(0)
     data = pd.read_csv(in_file)
-    data = data[:-2]
+    data = data[:-1]
     x_name = data.columns[x_index]
     for y_index in y_list:
         y_name_list.append(data.columns[y_index])
