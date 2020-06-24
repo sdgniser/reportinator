@@ -2,6 +2,7 @@ import os
 import sys
 import reportinator.config
 import importlib
+
 sys.path.append(reportinator.config.script.location)
 
 def main(module, section):

@@ -41,6 +41,7 @@ setup(name='reportinator',
           'pyyaml',
           'configurator',
           'xlrd',
+          'scipy',
           ],
       include_package_data=True,
       zip_safe=False)

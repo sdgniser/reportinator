@@ -4,6 +4,7 @@ import os
 import csv
 import reportinator
 import reportinator.figures as figures
+
 def main(section):
     output = ""
     output += "\n\\section{Graphs}\n"
@@ -28,7 +29,7 @@ def main(section):
         fitmatch = "\n".join(s for s in lastline if "fit(" in s).split('\n', 1)
         for graphs in graphmatch:
             foundfit = False
-            if not extract(fitmatch[0]) == None:
+            if extract(fitmatch[0]) is not None:
                 fit_list = extract(fitmatch[0])
                 fitfun = fit_list
                 fitmatch.pop(0)
@@ -42,11 +43,10 @@ def main(section):
             graph_list = str(graph_list).replace('[', '').replace(']', '').replace('\'', '').replace(' ', '')
             n = str(source[:-4] + str(graphmatch.index(graphs)))
             if foundfit:
-                output += figures.main(source, graph_list, n, fit = fitfun)
+                output += figures.main(source, graph_list, n, fit=fitfun)
             else:
                 output += figures.main(source, graph_list, n)
     return output
-
 
 
 if __name__ == "__main__":

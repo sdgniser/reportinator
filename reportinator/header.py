@@ -21,6 +21,7 @@ def main(section):
     """ % (reportinator.config.user.style, title, reportinator.config.user.name, reportinator.config.user.affiliation)
     return header
 
+
 if __name__ == "__main__":
     section = sys.argv[1]
     print(main(section))

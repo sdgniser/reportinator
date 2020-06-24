@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 import sys
 
 def main():
@@ -14,12 +13,13 @@ def main():
     import pkg_resources
 
     path = os.getcwd()
-    shutil.rmtree(path + '/__pycache__', ignore_errors = True, onerror = None)
+    shutil.rmtree(path + '/__pycache__', ignore_errors=True, onerror=None)
     config = reportinator.config
     
     if config.user.name == "unsetname":
         print("Performing reconfiguration setup...")
         import reportinator.reconfig
+
         reportinator.reconfig.main()
         print("Reconfiguration complete. Run reportinator again to process your report.")
         exit()
@@ -27,9 +27,9 @@ def main():
     output = ""
 
     parser = argparse.ArgumentParser(description='Welcome to Reportinator 1.0')
-    parser.add_argument('--source', required = False, default = False, help = "Directory path of the source files, without / at the end")
-    parser.add_argument('--install', required = False, default = False, help = "Directory path of the source files, without / at the end")
-    parser.add_argument('--reconfig', required = False, default = False, action = "store_true", help = "Run the reconfiguration script")
+    parser.add_argument('--source', required=False, default=False, help="Directory path of the source files, without / at the end")
+    parser.add_argument('--install', required=False, default=False, help="Directory path of the source files, without / at the end")
+    parser.add_argument('--reconfig', required=False, default=False, action="store_true", help="Run the reconfiguration script")
     args = parser.parse_args()
 
     if args.source:
@@ -45,6 +45,7 @@ def main():
     if config.reconfig or args.reconfig:
         print("Performing reconfiguration setup...")
         import reportinator.reconfig
+        
         reportinator.reconfig.main()
         print("Reconfiguration complete. Run reportinator again to process your report.")
         exit()
@@ -55,7 +56,7 @@ def main():
     print("Your LaTeX code is being processed. Please check your source directory")
 
     # Copying over files to cache directory
-    shutil.rmtree(cache_dir, ignore_errors = True, onerror = None)
+    shutil.rmtree(cache_dir, ignore_errors=True, onerror=None)
     try:
         os.mkdir(cache_dir)
         os.mkdir(cache_dir + '/csvs')
@@ -105,7 +106,7 @@ def main():
     if (pkg_resources.resource_exists("reportinator", "layouts/" + documentstyle + ".cls")):
         shutil.copy(pkg_resources.resource_filename("reportinator", "layouts/" + documentstyle + ".cls"), path + "/" + documentstyle + ".cls")
 
-    shutil.rmtree(path + "/csvs", ignore_errors = True, onerror = None)
+    shutil.rmtree(path + "/csvs", ignore_errors=True, onerror=None)
 
     # Compilation
     os.chdir(path)

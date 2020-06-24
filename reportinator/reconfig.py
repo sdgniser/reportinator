@@ -17,11 +17,13 @@ def main(*args, **kwargs):
         import pkg_resources
         import os
         import shutil
+
         if os.path.exists(os.path.expanduser("~/Desktop")):
             if (pkg_resources.resource_exists("reportinator", "scripts/make-my-report.py")):
                 shutil.copy(pkg_resources.resource_filename("reportinator", "scripts/make-my-report.py"), os.path.expanduser("~/Desktop/make-my-report.py"))
         try:
             import reportinator.win_add2path
+
             reportinator.win_add2path.main()
         except ModuleNotFoundError:
             pass
@@ -90,6 +92,7 @@ def main(*args, **kwargs):
 
     with open(configpath, "w") as f:
         yaml.dump(config, f)
+
 
 if __name__ == "__main__":
     main()

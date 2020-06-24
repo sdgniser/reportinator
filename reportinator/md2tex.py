@@ -2,7 +2,6 @@ import sys
 import re
 import os
 
-
 def convert(string):
     string = '\n' + string
 

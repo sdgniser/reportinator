@@ -9,6 +9,8 @@ import reportinator.functions as fn
 import reportinator
 import reportinator.config
 
+from scipy.optimize import curve_fit
+
 def main(file, lister, index, *args, **kwargs):
     if reportinator.config.compiler == "none":
         usetex = False
@@ -37,32 +39,32 @@ def main(file, lister, index, *args, **kwargs):
         x = data[x_name]
         x = list(map(float, x))
         f = plt.figure()
-        plt.rc('text', usetex = usetex)
-        plt.rc('font', family = 'serif')
+        plt.rc('text', usetex=usetex)
+        plt.rc('font', family='serif')
         i=0
         markers=['o','+','s','^','x','D','v']
         for y_name in y_name_list:
             y = data[y_name]
             y = list(map(float, y))
-            plt.scatter (x,y, marker = markers[i],
-                color = '#FFA500', label = "Observed, for "+y_name)
+            plt.scatter (x, y, marker=markers[i],
+                color = '#FFA500', label ="Observed, for "+y_name)
             if not fun:
                 cap = False
                 pass
             else:
                 p,_,cap = fit(x,y, fun)
                 fitfig = np.poly1d(p)
-                plt.plot(x,fitfig(x), linestyle = 'dotted',color = '#000000',label = "Fitted Data")
+                plt.plot(x, fitfig(x), linestyle='dotted', color='#000000', label="Fitted Data")
             i+=1
-        plt.xlabel(r'%s' % x_name,fontsize = 13)
-        plt.ylabel(r'%s'% y_name,fontsize = 13)
+        plt.xlabel(r'%s' % x_name, fontsize=13)
+        plt.ylabel(r'%s'% y_name, fontsize=13)
         plt.legend()
         if "$" in y_name:
             y_new = y_name.replace("$","")
             y_new = y_new.replace("\\","")
-            f.savefig(cache_dir + "/" + y_new.split(" ")[0] + n + ".pdf", bbox_inches = 'tight')
+            f.savefig(cache_dir + "/" + y_new.split(" ")[0] + n + ".pdf", bbox_inches='tight')
         else:
-            f.savefig(cache_dir + "/" + y_name.split(" ")[0] + n + ".pdf", bbox_inches = 'tight')
+            f.savefig(cache_dir + "/" + y_name.split(" ")[0] + n + ".pdf", bbox_inches='tight')
         return cap
 
     def pregraph(name,n,cap):
@@ -79,42 +81,38 @@ def main(file, lister, index, *args, **kwargs):
             output = '\\begin{figure}[H]' + '\n' + '\\centering' + '\n' + '\\includegraphics[width = \\columnwidth]' + '{' + location + '}' + '\n' + '\\caption{' + tag + ', ' + cap + '}' + '\n' + '\\label{g:\"' + tag_new+'\"}' + '\n' + '\\end{figure}'
         return output
 
-    def fit(x,y,fun):
+    def fit(x, y, fun):
         output = ""
         if fun == "lin":
-            p, pcov = np.polyfit(x,y,1,cov = True)
+            p, pcov = curve_fit(fn.lin, x, y)
             p_sigma = np.sqrt(np.diag(pcov))
-            fitfun = fn.lin(p,p_sigma)
-            cap = (r'%s' % fitfun)
-        elif fun == "pol2":
-            p, pcov = np.polyfit(x,y,2,cov = True)
+
+        elif fun == "quad":
+            p, pcov = curve_fit(fn.quad, x, y)
             p_sigma = np.sqrt(np.diag(pcov))
-            fitfun = fn.pol2(p,p_sigma)
-            cap = (r'%s' % fitfun)
-        elif fun == "pol3":
-            p, pcov = np.polyfit(x,y,3,cov = True)
+
+        elif fun == "exp":
+            p, pcov = curve_fit(fn.exp, x, y)
             p_sigma = np.sqrt(np.diag(pcov))
-            fitfun = fn.pol3(p,p_sigma)
-            cap = (r'%s' % fitfun)
-        elif fun == "pol4":
-            p, pcov = np.polyfit(x,y,4,cov = True)
+
+        elif fun == "log":
+            p, pcov = curve_fit(fn.log, x, y)
             p_sigma = np.sqrt(np.diag(pcov))
-            fitfun = fn.pol4(p,p_sigma)
-            cap = (r'%s' % fitfun)
-        elif fun == "pol5":
-            p, pcov = np.polyfit(x,y,5,cov = True)
+
+        elif fun == "gauss":
+            p, pcov = curve_fit(fn.gauss, x, y)
             p_sigma = np.sqrt(np.diag(pcov))
-            fitfun = fn.pol5(p,p_sigma)
-            cap = (r'%s' % fitfun)
-        
-        # if fun == "expo":
-        #     func.expo()
-        # elif fun == "log":
+
+        elif fun == "boltz":
+            p, pcov = curve_fit(fn.boltz, x, y)
+            p_sigma = np.sqrt(np.diag(pcov))
+
         else:
             output += "Wrong function"
-        
 
-        return p,pcov,cap
+        cap = (f"{fn.txt(fun, p, p_sigma)!s}")
+        
+        return p, pcov, cap
 
     cap = plot(x_name, y_name_list, data, n)
     return pregraph(y_name_list[-1], n,cap)

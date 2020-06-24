@@ -21,6 +21,7 @@ A thing to note here is that on first installation, reportinator will exit after
 You do not need to install these, pip does that by itself. But heres a list of what gets installed. We are not listing the things the dependencies install.
 * matplotlib
 * numpy
+* scipy
 * ruamel.yaml
 * doi2bib
 * pandas

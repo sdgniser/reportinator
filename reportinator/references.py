@@ -21,6 +21,7 @@ def main(section):
     output +=  "\\printbibliography[heading=none]\n\n"
     return output
 
+
 if __name__ == "__main__":
     section = sys.argv[1]
     print(main(section))
