@@ -5,6 +5,7 @@ import csv
 import reportinator
 import reportinator.figures as figures
 
+
 def main(section):
     output = ""
     output += "\n\\section{Graphs}\n"
@@ -13,9 +14,9 @@ def main(section):
     for file in os.listdir(reportinator.cache + "/csvs"):
         source_csv.append(file)
 
-    def extract(string, start = '(', stop = ')'):
+    def extract(string, start="(", stop=")"):
         try:
-            return string[string.index(start) + 1:string.index(stop)]
+            return string[string.index(start) + 1: string.index(stop)]
         except:
             return None
 
@@ -25,8 +26,11 @@ def main(section):
         csv_path = reportinator.cache + "/csvs/" + source
         data = list(csv.reader(open(csv_path)))
         lastline = data[-1]
-        graphmatch = "\n".join(s for s in lastline if "graph(" in s).split('\n', 1)
-        fitmatch = "\n".join(s for s in lastline if "fit(" in s).split('\n', 1)
+
+        graphmatch = "\n".join(s for s in lastline if "graph(" in s).split("\n", 1)
+
+        fitmatch = "\n".join(s for s in lastline if "fit(" in s).split("\n", 1)
+
         for graphs in graphmatch:
             foundfit = False
             if extract(fitmatch[0]) is not None:
@@ -39,8 +43,14 @@ def main(section):
                 print("WARNING: " + source + " is not being graphed")
                 continue
             else:
-                graph_list = extract(graphs).split(',')
-            graph_list = str(graph_list).replace('[', '').replace(']', '').replace('\'', '').replace(' ', '')
+                graph_list = extract(graphs).split(",")
+            graph_list = (
+                str(graph_list)
+                .replace("[", "")
+                .replace("]", "")
+                .replace("'", "")
+                .replace(" ", "")
+            )
             n = str(source[:-4] + str(graphmatch.index(graphs)))
             if foundfit:
                 output += figures.main(source, graph_list, n, fit=fitfun)

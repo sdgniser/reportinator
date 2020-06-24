@@ -1,5 +1,6 @@
 import sys
 
+
 def main(section):
     output = "\\end{document}"
     return output

@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 import sys
 
+
 def main():
     import os
-    import glob,os
+    import glob
     import argparse
     import sys
     import shutil
@@ -13,23 +14,41 @@ def main():
     import pkg_resources
 
     path = os.getcwd()
-    shutil.rmtree(path + '/__pycache__', ignore_errors=True, onerror=None)
+    shutil.rmtree(path + "/__pycache__", ignore_errors=True, onerror=None)
     config = reportinator.config
-    
+
     if config.user.name == "unsetname":
         print("Performing reconfiguration setup...")
         import reportinator.reconfig
 
         reportinator.reconfig.main()
-        print("Reconfiguration complete. Run reportinator again to process your report.")
+        print(
+            "Reconfiguration complete. Run reportinator again to process your report."
+        )
         exit()
 
     output = ""
 
-    parser = argparse.ArgumentParser(description='Welcome to Reportinator 1.0')
-    parser.add_argument('--source', required=False, default=False, help="Directory path of the source files, without / at the end")
-    parser.add_argument('--install', required=False, default=False, help="Directory path of the source files, without / at the end")
-    parser.add_argument('--reconfig', required=False, default=False, action="store_true", help="Run the reconfiguration script")
+    parser = argparse.ArgumentParser(description="Welcome to Reportinator 1.0")
+    parser.add_argument(
+        "--source",
+        required=False,
+        default=False,
+        help="Directory path of the source files, without / at the end",
+    )
+    parser.add_argument(
+        "--install",
+        required=False,
+        default=False,
+        help="Directory path of the source files, without / at the end",
+    )
+    parser.add_argument(
+        "--reconfig",
+        required=False,
+        default=False,
+        action="store_true",
+        help="Run the reconfiguration script",
+    )
     args = parser.parse_args()
 
     if args.source:
@@ -37,17 +56,18 @@ def main():
 
     if args.install:
         if os.path.exists(args.install):
-            shutil.copy(args.install, config.script.location + '/' + args.install)
+            shutil.copy(args.install, config.script.location + "/" + args.install)
             print("New script installed: " + args.install)
         exit()
-
 
     if config.reconfig or args.reconfig:
         print("Performing reconfiguration setup...")
         import reportinator.reconfig
-        
+
         reportinator.reconfig.main()
-        print("Reconfiguration complete. Run reportinator again to process your report.")
+        print(
+            "Reconfiguration complete. Run reportinator again to process your report."
+        )
         exit()
 
     documentstyle = config.user.style
@@ -59,21 +79,21 @@ def main():
     shutil.rmtree(cache_dir, ignore_errors=True, onerror=None)
     try:
         os.mkdir(cache_dir)
-        os.mkdir(cache_dir + '/csvs')
+        os.mkdir(cache_dir + "/csvs")
     except:
         pass
 
     for file in os.listdir(path):
         ext = os.path.splitext(file)[1]
-        if ext == '.md':
+        if ext == ".md":
             tempath = cache_dir + "/" + file
-            shutil.copy(path + '/' + file, cache_dir + "/" + file)
-        elif ext == '.csv':
-            shutil.copy(path + '/' + file, cache_dir + "/csvs/" + file)
+            shutil.copy(path + "/" + file, cache_dir + "/" + file)
+        elif ext == ".csv":
+            shutil.copy(path + "/" + file, cache_dir + "/csvs/" + file)
         else:
-            shutil.copy(path + '/' + file, cache_dir + "/" + file)
+            shutil.copy(path + "/" + file, cache_dir + "/" + file)
     try:
-        os.remove(cache_dir + '/output.tex')
+        os.remove(cache_dir + "/output.tex")
     except OSError:
         pass
 
@@ -84,7 +104,7 @@ def main():
     sections = list()
     section = ""
     for line in lines:
-        if line[:2] == '# ':
+        if line[:2] == "# ":
             sections.append(section)
             section = ""
         section += line
@@ -92,7 +112,7 @@ def main():
 
     output += reportinator.scriptmatcher.main("Header", "")
     for section in sections[1:]:
-        name=section.split('\n', 1)[0][2:]
+        name = section.split("\n", 1)[0][2:]
         print("Processing " + name)
         output += reportinator.scriptmatcher.main(name, section)
     output += reportinator.scriptmatcher.main("Footer", "")
@@ -103,8 +123,15 @@ def main():
     # Copying files back
     copy_tree(cache_dir, path)
 
-    if (pkg_resources.resource_exists("reportinator", "layouts/" + documentstyle + ".cls")):
-        shutil.copy(pkg_resources.resource_filename("reportinator", "layouts/" + documentstyle + ".cls"), path + "/" + documentstyle + ".cls")
+    if pkg_resources.resource_exists(
+        "reportinator", "layouts/" + documentstyle + ".cls"
+    ):
+        shutil.copy(
+            pkg_resources.resource_filename(
+                "reportinator", "layouts/" + documentstyle + ".cls"
+            ),
+            path + "/" + documentstyle + ".cls",
+        )
 
     shutil.rmtree(path + "/csvs", ignore_errors=True, onerror=None)
 
@@ -122,7 +149,15 @@ def main():
             print("Couldn't Compile LaTeX using " + compiler)
     if shutil.which("latexmk"):
         os.system("latexmk -c")
-    for f in glob.iglob("*.aux" or "*.bcf" or "*.log" or "*.run.xml" or "*.fls" or ".fbd.latexmk" or ".blg"):
+    for f in glob.iglob(
+        "*.aux"
+        or "*.bcf"
+        or "*.log"
+        or "*.run.xml"
+        or "*.fls"
+        or ".fbd.latexmk"
+        or ".blg"
+    ):
         os.remove(f)
 
     print("Your shit's sorted")

@@ -5,6 +5,7 @@ import importlib
 
 sys.path.append(reportinator.config.script.location)
 
+
 def main(module, section):
     module = module.lower()
     try:

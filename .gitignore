@@ -3,3 +3,6 @@ __pycache__/
 example/
 reportinator.egg-info/
 
+.tox/
+
+config2.yml
