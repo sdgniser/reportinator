@@ -2,7 +2,7 @@ version: 2.1
 
 orbs:
   win: circleci/windows@2.2.0
-  
+
 jobs:
   build-test-linux:
     docker:
@@ -16,11 +16,14 @@ jobs:
           command: reportinator --source example
           name: Testing
       - run:
-          command: ls ./example/output.tex; ls ./example/output.pdf
+          command: ls ./example/output.tex; ls ./example
           name: Output generation
       - run:
           command: cat ./example/output.tex
           name: TeX generation
+      - run:
+          command: which pdflatex; which latexmk
+          name: TeX compilers
   build-test-windows:
     executor: win/default
     steps:
@@ -37,7 +40,6 @@ jobs:
       - run:
           command: cat ./example/output.tex
           name: TeX generation
-
 workflows:
   build-and-test:
     jobs:
