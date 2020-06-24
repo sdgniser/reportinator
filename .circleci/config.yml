@@ -1,45 +1,13 @@
+# Use the latest 2.1 version of CircleCI pipeline process engine. See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
-
+# Use a package of configuration called an orb.
 orbs:
-  win: circleci/windows@2.2.0
-  
-jobs:
-  build-test-linux:
-    docker:
-      - image: circleci/python:latest
-    steps:
-      - checkout
-      - run:
-          command: python3 -m pip install -e .; sudo apt-get install texlive-latex-extra texlive-bibtex-extra
-          name: Linux installation
-      - run:
-          command: reportinator --source example
-          name: Testing
-      - run:
-          command: ls ./example/output.tex; ls ./example/output.pdf
-          name: Output generation
-      - run:
-          command: cat ./example/output.tex
-          name: TeX generation
-  build-test-windows:
-    executor: win/default
-    steps:
-      - checkout
-      - run:
-          command: py -m pip install -e .
-          name: Windows installation
-      - run:
-          command: reportinator --source example
-          name: Testing
-      - run:
-          command: ls ~/Desktop/make-my-report.py; ls ./example/output.tex
-          name: Output generation
-      - run:
-          command: cat ./example/output.tex
-          name: TeX generation
-
+  # Declare a dependency on the welcome-orb
+  welcome: circleci/welcome-orb@0.4.1
+# Orchestrate or schedule a set of jobs
 workflows:
-  build-and-test:
+  # Name the workflow "welcome"
+  welcome:
+    # Run the welcome/run job in its own container
     jobs:
-      - build-test-linux
-      - build-test-windows
+      - welcome/run
