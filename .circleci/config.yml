@@ -9,10 +9,10 @@ jobs:
     steps:
       - checkout
       - run:
-          command: python3 -m pip install -e .; sudo apt-get install texlive-latex-extra texlive-bibtex-extra
+          command: python3 -m pip install -e .; sudo apt-get install texlive-latex-extra texlive-bibtex-extra latexmk
           name: Linux installation
       - run:
-          command: reportinator --source example
+          command: reportinator --source example --name Spandan --affil NISER --compiler "latexmk -pdf -bibtex -f -silent"
           name: Testing
       - run:
           command: ls ./example/output.tex; ls ./example
