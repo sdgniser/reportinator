@@ -17,6 +17,7 @@ ENV = "Environment"
 PATH = "PATH"
 DEFAULT = "%PATH%"
 
+
 def modify():
     pythonpath = os.path.dirname(os.path.normpath(sys.executable))
     scripts = os.path.join(pythonpath, "Scripts")
@@ -48,7 +49,7 @@ def main():
     paths, envpath = modify()
     if len(paths) > 1:
         print("Path(s) added:")
-        print('\n'.join(paths[1:]))
+        print("\n".join(paths[1:]))
     else:
         print("No path was added")
     print("\nPATH is now:\n%s\n" % envpath)
@@ -56,5 +57,5 @@ def main():
     print(winreg.ExpandEnvironmentStrings(envpath))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
