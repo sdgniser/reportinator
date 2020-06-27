@@ -41,7 +41,7 @@ def main(file, lister, index, *args, **kwargs):
         x = data[x_name]
         x = list(map(float, x))
         f = plt.figure()
-        plt.rc("text", usetex=usetex)
+        plt.rc("text", usetex=False)
         plt.rc("font", family="serif")
         i = 0
         markers = ["o", "+", "s", "^", "x", "D", "v"]

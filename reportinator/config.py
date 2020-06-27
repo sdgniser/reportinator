@@ -7,11 +7,11 @@ cdir = str(os.path.dirname(os.path.realpath(sys.argv[0])))
 config = Config(
     {
         "user": {
-            "name": "Spandan",
-            "affiliation": "NISER",
+            "name": "unsetname",
+            "affiliation": "unsetaffiliation",
             "style": "double",
         },
-        "reconfig": False,
+        "reconfig": True,
         "compiler": "none",
         "script": {
             "location": cdir,

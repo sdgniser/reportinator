@@ -16,17 +16,6 @@ def main():
     path = os.getcwd()
     shutil.rmtree(path + "/__pycache__", ignore_errors=True, onerror=None)
     config = reportinator.config
-
-    if config.user.name == "unsetname":
-        print("Performing reconfiguration setup...")
-        import reportinator.reconfig
-
-        reportinator.reconfig.main()
-        print(
-            "Reconfiguration complete. Run reportinator again to process your report."
-        )
-        exit()
-
     output = ""
 
     parser = argparse.ArgumentParser(description="Welcome to Reportinator 1.0")
@@ -49,6 +38,30 @@ def main():
         action="store_true",
         help="Run the reconfiguration script",
     )
+    parser.add_argument(
+        "--name",
+        required=False,
+        default=False,
+        help="Your name",
+    )
+    parser.add_argument(
+        "--affil",
+        required=False,
+        default=False,
+        help="Your affiliation",
+    )
+    parser.add_argument(
+        "--compiler",
+        required=False,
+        default=False,
+        help="Your compiler of choice",
+    )
+    parser.add_argument(
+        "--classfile",
+        required=False,
+        default=False,
+        help="Your class of choice",
+    )
     args = parser.parse_args()
 
     if args.source:
@@ -60,15 +73,26 @@ def main():
             print("New script installed: " + args.install)
         exit()
 
-    if config.reconfig or args.reconfig:
+    conf = False
+    if args.name or args.affil:
+        config.user.name = args.name
+        config.user.affiliation = args.affil
+        if args.compiler:
+            config.compiler = args.compiler
+        if args.classfile:
+            config.user.style = args.classfile
+        config.reconfig = False
+        conf = True
+
+    if config.user.name == "unsetname" or config.reconfig or args.reconfig:
         print("Performing reconfiguration setup...")
         import reportinator.reconfig
 
-        reportinator.reconfig.main()
-        print(
-            "Reconfiguration complete. Run reportinator again to process your report."
-        )
-        exit()
+        reportinator.reconfig.main(conf)
+        print("Reconfiguration complete.")
+        if not conf:
+            print("Run reportinator again to process your report.")
+            exit()
 
     documentstyle = config.user.style
     cache_dir = reportinator.cache

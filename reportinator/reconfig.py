@@ -6,7 +6,7 @@ import shutil
 import ruamel.yaml
 
 
-def main(*args, **kwargs):
+def main(conf, *args, **kwargs):
     import os
     import sys
     import fileinput
@@ -68,39 +68,41 @@ def main(*args, **kwargs):
     with open(configpath) as f:
         config = yaml.load(f)
 
-    name = input("Enter name: ")
-    affiliation = input("Enter affiliation: ")
-    style = input("Enter name of the custom class file (Leave blank for default): ")
+    if not conf:
+        name = input("Enter name: ")
+        affiliation = input("Enter affiliation: ")
+        style = input("Enter name of the custom class file (Leave blank for default): ")
 
-    if name:
-        config["user"]["name"] = name
-    if affiliation:
-        config["user"]["affiliation"] = affiliation
-    if style:
-        config["user"]["style"] = style
-    else:
-        config["user"]["style"] = "double"
+        if name:
+            config["user"]["name"] = name
+        if affiliation:
+            config["user"]["affiliation"] = affiliation
+        if style:
+            config["user"]["style"] = style
+        else:
+            config["user"]["style"] = "double"
 
-    if shutil.which("latexmk"):
-        config["compiler"] = "latexmk -pdf -bibtex -f -silent"
-    elif shutil.which("pydflatex"):
-        config["compiler"] = "pydflatex -t -k -o"
-    elif shutil.which("pdflatex"):
-        config[
-            "compiler"
-        ] = "pdflatex -interaction nonstopmode -halt-on-error -file-line-error"
-    elif shutil.which("xelatex"):
-        config["compiler"] = "xelatex"
-    elif shutil.which("lualatex"):
-        config["compiler"] = "lualatex"
-    else:
-        config["compiler"] = "none"
+        if shutil.which("latexmk"):
+            config["compiler"] = "latexmk -pdf -bibtex -f -silent"
+        elif shutil.which("pydflatex"):
+            config["compiler"] = "pydflatex -t -k -o"
+        elif shutil.which("pdflatex"):
+            config[
+                "compiler"
+            ] = "pdflatex -interaction nonstopmode -halt-on-error -file-line-error"
+        elif shutil.which("xelatex"):
+            config["compiler"] = "xelatex"
+        elif shutil.which("lualatex"):
+            config["compiler"] = "lualatex"
+        else:
+            config["compiler"] = "none"
 
-    config["reconfig"] = False
+        config["reconfig"] = False
 
     with open(configpath, "w") as f:
         yaml.dump(config, f)
 
 
 if __name__ == "__main__":
-    main()
+    conf = False
+    main(conf)
