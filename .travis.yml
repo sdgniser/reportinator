@@ -21,6 +21,5 @@ script:
   - reportinator --source example --name Spandan --affil NISER --compiler "latexmk -pdf -bibtex -f -silent"
   - ls ./example/output.tex; ls ./example
   - cat ./example/output.tex
-  - which pdflatex; which latexmk
 
 root: true
