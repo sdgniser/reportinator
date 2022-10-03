@@ -7,7 +7,7 @@ from setuptools.command.install import install
 def _post_install():
     import reportinator.reconfig
 
-    reportinator.reconfig.main(first_install=True)
+    reportinator.reconfig.main(conf=False, first_install=True)
     print("POST INSTALL")
 
 

@@ -35,7 +35,7 @@ def main(conf, *args, **kwargs):
             reportinator.win_add2path.main()
         except ModuleNotFoundError:
             pass
-        exit()
+        sys.exit(0)
 
     yaml = ruamel.yaml.YAML()
     configlist = ["~/.config", "~/AppData/Local/Programs"]
